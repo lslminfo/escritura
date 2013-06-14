@@ -1,0 +1,87 @@
+/* Artfully masterminded by ZURB  */
+
+/* -------------------------------------------------- 
+   Table of Contents
+-----------------------------------------------------
+:: Shared Styles
+:: Page Name 1
+:: Page Name 2
+*/
+
+
+/* -----------------------------------------
+   Shared Styles
+----------------------------------------- */
+
+
+
+/* -----------------------------------------
+   Page Name 1
+----------------------------------------- */
+
+
+
+
+/* -----------------------------------------
+   Page Name 2
+----------------------------------------- */
+
+
+.principal{
+	margin-top: 10px;
+	border-bottom: 1px solid #000000;
+	/*border-radius: 5px;*/
+	/*height: 550px;*/
+}
+
+.in_line{
+	/*border: 1px solid #000000;*/
+	text-align: right;
+	margin-top: 8px;
+
+}
+
+.informa{
+	margin-top: -1px;
+	border: 1px solid #000000;
+	border-radius: 5px;
+	height: 100px;
+	padding: 5px;
+}
+
+.subheader{
+	margin-top: -20px;
+}
+
+.mensagem{
+	margin-top: 5px;
+	border: 1px solid #F6F6F6;
+	height: 30px;
+	padding: 7px;
+}
+
+.c_modulos{
+	margin-top: 5px;
+	/*border: 1px solid #F6F6F6;*/
+	padding: 7px;
+}
+
+/* Configura o link "Esqueci minha senha", no telas_modulos - case 'login' */
+.esqueci{
+	font-size: 11px;
+}
+
+.telas_c{
+	/*border: 1px solid #000000;*/
+	margin-top: 10px;
+	padding: 7px;
+}
+
+.alert-box p{
+	margin: 0 !important;
+	/*text-align: center;*/
+}
+
+.espaco{
+	margin-right: 10px;
+}
