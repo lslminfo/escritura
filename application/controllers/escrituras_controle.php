@@ -154,6 +154,18 @@ class Escrituras_controle extends CI_Controller {
 	public function cadastrar(){
 		esta_logado();
 		
+		
+		function getCidades($id){
+			$cidades = $this->geral_m->getCidades($id);
+			
+			if(empty($cidades))
+				return '{ "nome:" "Nenhuma cidade encontrada" }';
+			
+			echo json_encode($cidades);
+			return;
+		}
+		
+		set_tema('footerinc', load_js(array('jquery')), FALSE);
 		set_tema('tituloaba', 'Cadastra RE', FALSE);
 		set_tema('titulop', '<h3 class="text-center">RESUMO DE ESCRITURAS</h3>');
 		set_tema('subtitulo', '<h4 class="subheader text-center">'.$this->session->userdata('razao').'</h4>');

@@ -112,6 +112,18 @@ class Geral_model extends CI_Model {
 		return $lt;		
 	}
 
+	function getEstados(){
+		return $this->db->get('estados')->result();
+	}
+
+	function getCidades($id){
+		return $this->db->select('cidades.id, cidades.nome')
+						->from('estados')
+						->join('cidades', 'cidades.id_uf=estados.id')
+						->where( array('estados.id' => $id))
+						->get()->result();
+	}
+
 
 	
 	

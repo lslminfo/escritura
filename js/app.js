@@ -42,10 +42,18 @@ $(document).ready(function(){
 	$("select[name=quadra]").change(function(){
 		quadra = $(this).val();
 		
-		if (quadra == 'Quadra')
-			return true;
-	
-		resetaCombo('lote', 'não sei "quadra" aqui!');
+		if (quadra == 'Quadras'){ // Caso 'quadra' seja igual a "Quadras", zera combo e passa mensagem
+			resetaCombo('lote', 'Escolha uma QD');
+			return false;
+		}
+
+	// Linha para testar se esta pegando a QD
+	$("select[name='lote']").empty();
+	var option = document.createElement('option');
+	$( option ).attr( {value : 'Lotes'} );
+	$( option ).append( '"'+quadra+'"' );
+	$("select[name='lote']").append( option );
+		
 	});
 });
 
@@ -55,5 +63,45 @@ function resetaCombo( el, lt ) {
    $( option ).attr( {value : ''} );
    $( option ).append( lt );
    $("select[name='"+el+"']").append( option );
-   return false;
 }
+
+$(function(){
+	$("select[name=estado]").change(function(){
+		estado = $(this).val();
+		
+		if ( estado === '')
+			return false;
+		
+		resetaCombo('cidade');
+		
+		$.getJSON('http://localhost/escritura/escrituras_controle/getCidades/' + estado, function(data){
+			var option = new Array();
+			
+			$.each(data, function(i, obj){
+				option[i] = document.createElement('option');
+				$(option[i]).attr({value : obj.id});
+				$(option[i]).append(obj.nome);
+				
+				$("select[name='cidade']").append(option[i]);
+			
+			});
+		});
+	});
+});
+
+function resetaCombo( el ){
+	$("select[name='"+el+"']").empty();
+	var option = document.createElement('option');
+	$(option).attr({value : ''});
+	$(option).append('Escolha'+estado);
+	$("select[name='"+el+"']").append(option);
+}
+
+
+
+
+
+
+
+
+

@@ -85,3 +85,8 @@
 .espaco{
 	margin-right: 10px;
 }
+
+.titulo_comprador{
+	margin: 0px !important;
+	padding: 5px !important;
+}

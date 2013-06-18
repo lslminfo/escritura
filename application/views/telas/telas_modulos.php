@@ -99,6 +99,11 @@ switch ($tela):
 		
 	case 'cadastrar':
 		esta_logado();
+		?>
+		<script type="text/javascript">
+			var path = '<?php echo base_url(); ?>'
+		</script>
+		<?php
 		
 		echo '<div class="twelve columns telas_c">';
 			//echo '<br /><br />Na espera por ação do USUÁRIO "CASE - TELAS_MODULOS.PHP "';
@@ -107,7 +112,6 @@ switch ($tela):
 			erros_validacao();
 			echo form_open(current_url(), array('class'=>'custon'));
 				echo '<div class="row">';
-				
 					echo '<div class="one mobile-one columns">';
 						echo 'Corretor 1:';
 					echo '</div>';
@@ -130,10 +134,151 @@ switch ($tela):
 						echo 'Lote:';
 					echo '</div>';
 					echo '<div class="one mobile-one columns">';
-						echo form_dropdown('lote', $this->geral_m->getLote('C', $this->session->userdata('id_emp')));
+						echo form_dropdown('lote', $this->geral_m->getLote('', $this->session->userdata('id_emp')));
 					echo '</div>';
-
 				echo '</div>';
+				
+				echo '<br />';
+				echo '<div class="row">';
+					echo '<div class="three mobile-one columns">';
+						echo '';
+					echo '</div>';
+					echo '<div class="two mobile-one columns">';
+						echo 'Área do Lote (m²):';
+					echo '</div>';
+					echo '<div class="one mobile-one columns">';
+						echo form_label('<strong>'.'307,62'.'</strong>');
+					echo '</div>';
+					echo '<div class="two mobile-one columns">';
+						echo 'Valor de tabela (R$):';
+					echo '</div>';
+					echo '<div class="one mobile-one columns">';
+						echo form_label('<strong>'.'55.833,03'.'</strong>');
+					echo '</div>';
+					echo '<div class="three mobile-one columns">';
+						echo '';
+					echo '</div>';
+					
+				echo '</div>';
+				
+				echo '<br />';
+				echo '<div class="row">';
+					echo '<div class="twelve columns">';
+
+						echo '<ul class="accordion">';
+						  echo '<li class="active">';
+						    echo '<div class="title titulo_comprador">';
+						      echo '<h6>Dados do Comprador 1</h6>';
+						    echo '</div>';
+						    echo '<div class="content">';
+						       	echo '<div class="row">';
+									echo '<div class="two mobile-one columns">';
+										echo 'Nome Completo:';
+									echo '</div>';
+									echo '<div class="ten mobile-one columns">';
+										echo form_input(array('name'=>'cliente1'), set_value('cliente1'));
+									echo '</div>';
+								echo '</div>';
+								
+								echo '<div class="row">';
+									echo '<div class="two mobile-one columns">';
+										echo 'Estado Civil: ';
+									echo '</div>';
+									echo '<div class="four mobile-one columns">';
+										echo form_dropdown('civil', array('casado'=>'Casado', 'solteiro'=>'Solteiro', 'divorciado'=>'Divorciado', 'estavel'=>'União estável', 'viuvo'=>'Viuvo', ), 'solteiro');
+									echo '</div>';
+									echo '<div class="one mobile-one columns">';
+										echo 'Regime:';
+									echo '</div>';
+									echo '<div class="five mobile-one columns">';
+										echo form_dropdown('regime', array('', ''));
+									echo '</div>';
+								echo '</div>';
+								echo '<br />';
+								echo '<div class="row">';
+									echo '<div class="two mobile-one columns">';
+										echo 'Numero do CPF:';
+									echo '</div>';
+									echo '<div class="four mobile-one columns">';
+										echo form_input(array('cpf'=>'cpf'), set_value('cpf'));
+									echo '</div>';
+									echo '<div class="two mobile-one columns">';
+										echo 'Numero do RG:';
+									echo '</div>';
+									echo '<div class="four mobile-one columns">';
+										echo form_input(array('rg'=>'rg'), set_value('rg'));
+									echo '</div>';
+								echo '</div>';
+								
+								echo '<div class="row">';
+									echo '<div class="two mobile-one columns">';
+										echo 'Nacionalidade:';
+									echo '</div>';
+									echo '<div class="four mobile-one columns">';
+										echo form_input(array('nacionalidade'=>'nacionalidade'), set_value('nacionalidade'));
+									echo '</div>';
+									echo '<div class="two mobile-one columns">';
+										echo 'Data Nascimento';
+									echo '</div>';
+									echo '<div class="four mobile-one columns">';
+										echo form_input(array('dtnascimento'=>'dtnascimento'), set_value('dtnascimento'));
+									echo '</div>';
+								echo '</div>';
+								
+								echo '<div class="row">';
+									echo '<div class="two mobile-one columns">';
+										echo 'Endereço Completo:';
+									echo '</div>';
+									echo '<div class="ten mobile-one columns">';
+										echo form_input(array('endereco'=>'endereco'), set_value('endereco'));
+									echo '</div>';
+								echo '</div>';
+
+								echo '<div class="row">';
+									echo '<div class="one mobile-one columns">';
+										echo 'CEP:';
+									echo '</div>';
+									echo '<div class="two mobile-one columns">';
+										echo form_input(array('cep'=>'cep'), set_value('cep'));
+									echo '</div>';
+									
+									echo '<div class="one mobile-one columns">';
+										echo 'Estado:';
+									echo '</div>';
+									echo '<div class="three mobile-one columns">';
+									
+										$estados = $this->geral_m->getEstados();
+										$options = array('' => 'Escolha');
+											foreach ($estados as $linha):
+												$options[$linha->id] = $linha->nome;
+											endforeach;
+										echo form_dropdown('estado', $options);
+									
+									echo '</div>';
+									echo '<div class="two mobile-one columns">';
+										echo 'Cidades:';
+									echo '</div>';
+									echo '<div class="three mobile-one columns">';
+										echo form_dropdown('cidade', array('' => 'Escolha um Estado'), '', 'id="cidade"');
+									echo '</div>';
+								echo '</div>';
+								
+								
+						    echo '</div>';
+						  echo '</li>';
+						  echo '<li>';
+						    echo '<div class="title titulo_comprador">';
+						      echo '<h6>Dados do Comprador 2</h6>';
+						    echo '</div>';
+						    echo '<div class="content">';
+						      echo '<p>Continuar FORM para pegar os dados do segundo comprador!</p>';
+						    echo '</div>';
+						  echo '</li>';
+						echo '</ul>';
+					
+					echo '</div>';
+				echo '</div>';
+				
 			echo form_fieldset_close();
 			echo form_close();
 		echo '</div>';
