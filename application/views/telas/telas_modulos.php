@@ -104,61 +104,71 @@ switch ($tela):
 			var path = '<?php echo base_url(); ?>'
 		</script>
 		<?php
+		$quadra = 'L';
+		$lote = 27;
+		$empreend = $this->session->userdata('id_emp');
 		
+		$ql = $this->geral_m->getLote($quadra, $lote, $empreend)->row();
+		if($ql->tbsituacaolote_id == 3) $situacao='Disponível'; 
 		echo '<div class="twelve columns telas_c">';
 			//echo '<br /><br />Na espera por ação do USUÁRIO "CASE - TELAS_MODULOS.PHP "';
 			get_msg('msgerro');
 			get_msg('msgok');
 			erros_validacao();
 			echo form_open(current_url(), array('class'=>'custon'));
-				echo '<div class="row">';
+				echo '<div class="row collapse">';
 					echo '<div class="one mobile-one columns">';
-						echo 'Corretor 1:';
+						echo '<span class="prefix">Corretor 1:</span>';
 					echo '</div>';
-					echo '<div class="three mobile-one columns">';
-						echo form_dropdown('corretor1', $this->geral_m->get_corretor($this->session->userdata('id_emp')));
+					echo '<div class="two mobile-one columns">';
+						echo form_dropdown('corretor1', $this->geral_m->get_corretor($this->session->userdata('id_emp')), '', 'class="drop"');
 					echo '</div>';
+
 					echo '<div class="one mobile-one columns">';
-						echo 'Corretor 2:';
+						echo '<span class="prefix">Corretor 2:</span>';
 					echo '</div>';
-					echo '<div class="three mobile-one columns">';
-						echo form_dropdown('corretor1', $this->geral_m->get_corretor($this->session->userdata('id_emp')));
+					echo '<div class="two mobile-one columns">';
+						echo form_dropdown('corretor2', $this->geral_m->get_corretor($this->session->userdata('id_emp')), '', 'class="drop"');
 					echo '</div>';
-					echo '<div class="one mobile-one columns">';
-						echo 'Quadra:';
-					echo '</div>';
-					echo '<div class="one mobile-one columns">';
-						echo form_dropdown('quadra', $this->geral_m->getQuadra($this->session->userdata('id_emp')));
-					echo '</div>';
-					echo '<div class="one mobile-one columns">';
-						echo 'Lote:';
+
+					echo '<div class="one mobile-one columns offset-by-one">';
+						echo '<span class="prefix">Quadra:</span>';
 					echo '</div>';
 					echo '<div class="one mobile-one columns">';
-						echo form_dropdown('lote', $this->geral_m->getLote('', $this->session->userdata('id_emp')));
+						echo form_input(array('name'=>'quadra'), set_value('quadra', $ql->quadra));
+					echo '</div>';
+					
+					echo '<div class="one mobile-one columns offset-by-one">';
+						echo '<span class="prefix">Lote:</span>';
+					echo '</div>';
+					echo '<div class="one mobile-one columns">';
+						echo form_input(array('name'=>'lote'), set_value('quadra', $ql->lote));;
 					echo '</div>';
 				echo '</div>';
 				
-				echo '<br />';
-				echo '<div class="row">';
-					echo '<div class="three mobile-one columns">';
-						echo '';
+				echo '<div class="row collapse">';
+					echo '<div class="two mobile-one columns">';
+						echo '<span class="prefix">Área do lote (m²):</span>';
 					echo '</div>';
 					echo '<div class="two mobile-one columns">';
-						echo 'Área do Lote (m²):';
+						$attributes = array('class'=>'txt_fixo',);
+						echo form_label(number_format($ql->mquadrado, 2, ',', '.'), '', $attributes);
 					echo '</div>';
-					echo '<div class="one mobile-one columns">';
-						echo form_label('<strong>'.'307,62'.'</strong>');
-					echo '</div>';
+
 					echo '<div class="two mobile-one columns">';
-						echo 'Valor de tabela (R$):';
+						echo '<span class="prefix">Valor de tabela:</span>';
 					echo '</div>';
-					echo '<div class="one mobile-one columns">';
-						echo form_label('<strong>'.'55.833,03'.'</strong>');
-					echo '</div>';
-					echo '<div class="three mobile-one columns">';
-						echo '';
+					echo '<div class="two mobile-one columns end">';
+						echo form_label(number_format($ql->mquadrado*$ql->vlmquadrado, 2, ',', '.'), '', $attributes);
 					echo '</div>';
 					
+					echo '<div class="two mobile-one columns">';
+						echo '<span class="prefix">Status:</span>';
+					echo '</div>';
+					echo '<div class="two mobile-one columns end">';
+						echo form_label($situacao, '', $attributes);
+					echo '</div>';
+
 				echo '</div>';
 				
 				echo '<br />';
@@ -185,13 +195,13 @@ switch ($tela):
 										echo 'Estado Civil: ';
 									echo '</div>';
 									echo '<div class="four mobile-one columns">';
-										echo form_dropdown('civil', array('casado'=>'Casado', 'solteiro'=>'Solteiro', 'divorciado'=>'Divorciado', 'estavel'=>'União estável', 'viuvo'=>'Viuvo', ), 'solteiro');
+										echo form_dropdown('civil', array('casado'=>'Casado', 'solteiro'=>'Solteiro', 'divorciado'=>'Divorciado', 'estavel'=>'União estável', 'viuvo'=>'Viuvo', ), 'solteiro', 'class="drop"');
 									echo '</div>';
 									echo '<div class="one mobile-one columns">';
 										echo 'Regime:';
 									echo '</div>';
 									echo '<div class="five mobile-one columns">';
-										echo form_dropdown('regime', array('', ''));
+										echo form_dropdown('regime', array('', ''), '', 'class="drop"');
 									echo '</div>';
 								echo '</div>';
 								echo '<br />';
@@ -246,26 +256,43 @@ switch ($tela):
 										echo 'Estado:';
 									echo '</div>';
 									echo '<div class="three mobile-one columns">';
-									
-										$estados = $this->geral_m->getEstados();
-										$options = array('' => 'Escolha');
-											foreach ($estados as $linha):
-												$options[$linha->id] = $linha->nome;
-											endforeach;
-										echo form_dropdown('estado', $options);
-									
+										echo form_input('');
 									echo '</div>';
 									echo '<div class="two mobile-one columns">';
 										echo 'Cidades:';
 									echo '</div>';
 									echo '<div class="three mobile-one columns">';
-										echo form_dropdown('cidade', array('' => 'Escolha um Estado'), '', 'id="cidade"');
+										echo form_input('');
+									echo '</div>';
+								echo '</div>';
+								
+								echo '<div class="row">';
+									echo '<div class="one mobile-one columns">';
+										echo 'Fone 1:';
+									echo '</div>';
+									echo '<div class="two mobile-one columns">';
+										echo form_input(array('fone1'=>'fone1'), set_value('fone1'));
+									echo '</div>';
+									
+									echo '<div class="one mobile-one columns">';
+										echo 'Fone 2:';
+									echo '</div>';
+									echo '<div class="two mobile-one columns">';
+										echo form_input(array('fone2'=>'fone2'), set_value('fone2'));
+									echo '</div>';
+									echo '<div class="one mobile-one columns">';
+										echo 'e-mail:';
+									echo '</div>';
+									echo '<div class="five mobile-one columns">';
+										echo form_input(array('email'=>'email'), set_value('eamil'));
 									echo '</div>';
 								echo '</div>';
 								
 								
+								
 						    echo '</div>';
 						  echo '</li>';
+						  
 						  echo '<li>';
 						    echo '<div class="title titulo_comprador">';
 						      echo '<h6>Dados do Comprador 2</h6>';
@@ -274,9 +301,226 @@ switch ($tela):
 						      echo '<p>Continuar FORM para pegar os dados do segundo comprador!</p>';
 						    echo '</div>';
 						  echo '</li>';
+						  
+						  echo '<li>';
+						    echo '<div class="title titulo_comprador">';
+						      echo '<h6>Dados do Comprador 3</h6>';
+						    echo '</div>';
+						    echo '<div class="content">';
+						      echo '<p>Continuar FORM para pegar os dados do terceiro comprador!</p>';
+						    echo '</div>';
+						  echo '</li>';
+
+						  echo '<li>';
+						    echo '<div class="title titulo_comprador">';
+						      echo '<h6>Dados do Comprador 4</h6>';
+						    echo '</div>';
+						    echo '<div class="content">';
+						      echo '<p>Continuar FORM para pegar os dados do quarto comprador!</p>';
+						    echo '</div>';
+						  echo '</li>';
+
 						echo '</ul>';
+
+						echo '<div class="alert-box">';
+							echo 'Quadro de Comissões';
+							echo '<a href="" class="close">&times;</a>';
+						echo '</div>';
+						echo '<div class="row">';
+						  echo '<div class="six columns">';
+
+						    echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">Valor do Investimento:</span>';
+						      echo '</div>';
+						      echo '<div class="four mobile-three columns end">';
+						        echo form_dropdown('lms', array(''=>'Leandro'), '', 'class="drop"'); 
+						      echo '</div>';
+						    echo '</div>';
+
+							echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">Valor de tabela:</span>';
+						      echo '</div>';
+						      echo '<div class="four mobile-three columns end">';
+						        echo '<input type="text" value="'.number_format($ql->mquadrado*$ql->vlmquadrado, 2, ',', '.').'" />';
+						      echo '</div>';
+						    echo '</div>';
+
+							echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">Valor a vista:</span>';
+						      echo '</div>';
+						      echo '<div class="four mobile-three columns end">';
+						        echo '<input type="text" />';
+						      echo '</div>';
+						    echo '</div>';
+						    
+						    echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">Valor da entrada:</span>';
+						      echo '</div>';
+						      echo '<div class="four mobile-three columns">';
+						        echo '<input type="text" />';
+						      echo '</div>';
+							  echo '<div class="four mobile-one columns">';
+							  	echo '<span class="postfix">'.$this->session->userdata('user_id').'%</span>';
+							  echo '</div>';
+						    echo '</div>';
+
+						  echo '</div>';
+						  
+						  echo '<div class="six columns">';
+						  
+						    echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">Comissão total:</span>';
+						      echo '</div>';
+						      echo '<div class="four mobile-three columns">';
+						        echo '<input type="text" />';
+						      echo '</div>';
+							  echo '<div class="four mobile-one columns">';
+							  	echo '<span class="postfix">'.$this->session->userdata('user_id').'%</span>';
+							  echo '</div>';
+						    echo '</div>';
+							echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">% Comissão STAR:</span>';
+						      echo '</div>';
+						      echo '<div class="four mobile-three columns">';
+						        echo '<input type="text" />';
+						      echo '</div>';
+							  echo '<div class="four mobile-one columns">';
+							  	echo '<span class="postfix">'.$this->session->userdata('user_id').'%</span>';
+							  echo '</div>';
+						    echo '</div>';
+							echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">% Comissão Corretor:</span>';
+						      echo '</div>';
+						      echo '<div class="four mobile-three columns">';
+						        echo '<input type="text" />';
+						      echo '</div>';
+							  echo '<div class="four mobile-one columns">';
+							  	echo '<span class="postfix">'.$this->session->userdata('user_id').'%</span>';
+							  echo '</div>';
+						    echo '</div>';
+							echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">% Comissão Parceiro:</span>';
+						      echo '</div>';
+						      echo '<div class="four mobile-three columns">';
+						        echo '<input type="text" />';
+						      echo '</div>';
+							  echo '<div class="four mobile-one columns">';
+							  	echo '<span class="postfix">'.$this->session->userdata('user_id').'%</span>';
+							  echo '</div>';
+						    echo '</div>';
+							
+						  echo '</div>';
+
+						echo '</div>';
+						
+						echo '<div class="alert-box centered">';
+							echo 'Entrada Empreendedores';
+							echo '<a href="" class="close">&times;</a>';
+						echo '</div>';
+						
+						echo '<div class="row">';
+						  echo '<div class="six columns">';
+						    echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">Saldo da entrada:</span>';
+						      echo '</div>';
+						      echo '<div class="three mobile-three columns end">';
+						        echo '<input type="text" />';
+						      echo '</div>';
+						    echo '</div>';
+
+						  echo '</div>';
+						  echo '<div class="six columns">';
+						    echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">Empreendedor 1:</span>';
+						      echo '</div>';
+						      echo '<div class="four mobile-three columns">';
+						        echo '<input type="text" />';
+						      echo '</div>';
+							  echo '<div class="four mobile-one columns">';
+							  	echo '<span class="postfix">'.$this->session->userdata('user_id').'%</span>';
+							  echo '</div>';
+						    echo '</div>';
+							echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">Empreendedor 2:</span>';
+						      echo '</div>';
+						      echo '<div class="four mobile-three columns">';
+						        echo '<input type="text" />';
+						      echo '</div>';
+							  echo '<div class="four mobile-one columns">';
+							  	echo '<span class="postfix">'.$this->session->userdata('user_id').'%</span>';
+							  echo '</div>';
+						    echo '</div>';
+							
+						  echo '</div>';
+
+						echo '</div>';
+						
+						echo '<div class="alert-box centered">';
+							echo 'Financiamento';
+							echo '<a href="" class="close">&times;</a>';
+						echo '</div>';
+						
+						echo '<div class="row">';
+						  echo '<div class="six columns">';
+						    echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">Saldo a financiar:</span>';
+						      echo '</div>';
+						      echo '<div class="three mobile-three columns end">';
+						        echo '<input type="text" />';
+						      echo '</div>';
+						    echo '</div>';
+
+						  echo '</div>';
+						  echo '<div class="six columns">';
+						    echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">Parcelado em:</span>';
+						      echo '</div>';
+						      echo '<div class="four mobile-three columns">';
+						        echo '<input type="text" />';
+						      echo '</div>';
+							  echo '<div class="four mobile-one columns">';
+							  	echo '<span class="postfix">meses</span>';
+							  echo '</div>';
+						    echo '</div>';
+							echo '<div class="row collapse">';
+						      echo '<div class="four mobile-one columns">';
+						        echo '<span class="prefix">No valor de:</span>';
+						      echo '</div>';
+						      echo '<div class="four mobile-three columns">';
+						        echo '<input type="text" />';
+						      echo '</div>';
+							  echo '<div class="four mobile-one columns">';
+							  	echo '<span class="postfix">mensais</span>';
+							  echo '</div>';
+						    echo '</div>';
+							
+						  echo '</div>';
+
+						echo '</div>';
+
+
+
+						echo '<div class="alert-box secondary">';
+							echo '<a class="radius button" href="#">Gravar</a>';
+							echo '<a class="radius button alert" href="#">Limpar</a>';
+							echo '<a href="" class="close">&times;</a>';
+						echo '</div>';
 					
 					echo '</div>';
+					
 				echo '</div>';
 				
 			echo form_fieldset_close();

@@ -92,39 +92,10 @@ class Geral_model extends CI_Model {
 		return $corr;
 	}
 	
-	function getQuadra($idemp){
-		$quadra = $this->db->query('SELECT quadra FROM tbquadralote WHERE tbempreendimento_id = '.$idemp.' GROUP BY quadra')->result();
-		$quad = array('Quadras'=>'Quadras');
-		foreach ($quadra as $linha):
-			$quad[$linha->quadra] = $linha->quadra;
-		endforeach;
-		return $quad;
+	public function getLote($quadra=NULL, $lote=NULL, $emp){
+		return $this->db->query('SELECT * FROM `tbquadralote` WHERE `tbempreendimento_id`='.$emp.' AND `quadra` LIKE "'.$quadra.'" AND lote = '.$lote.' AND `tbsituacaolote_id`=3');
 	}
-
-	function getLote($quadra=NULL, $idemp=NULL){
-		if(!is_null($quadra) || !is_null($idemp)):
-			$lotes = $this->db->query('SELECT lote FROM tbquadralote WHERE tbempreendimento_id='.$idemp.' AND quadra LIKE "'.$quadra.'" AND tbsituacaolote_id = 3')->result();
-			$lt = array('Lotes'=>'Lotes');
-			foreach ($lotes as $linha):
-				$lt[$linha->lote] = $linha->lote;
-			endforeach;
-		endif;
-		return $lt;		
-	}
-
-	function getEstados(){
-		return $this->db->get('estados')->result();
-	}
-
-	function getCidades($id){
-		return $this->db->select('cidades.id, cidades.nome')
-						->from('estados')
-						->join('cidades', 'cidades.id_uf=estados.id')
-						->where( array('estados.id' => $id))
-						->get()->result();
-	}
-
-
+	
 	
 	
 }
