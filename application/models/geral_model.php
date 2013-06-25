@@ -83,18 +83,61 @@ class Geral_model extends CI_Model {
 		endif;
 	}
 
-	public function get_corretor($idemp){
-		$lms = $this->db->query('SELECT c_nome FROM tbempreendimento_has_tbcorretor JOIN tbcorretor ON tbcorretor.id = tbcorretor_id AND tbempreendimento_id ='.$idemp)->result();
-		$corr = array('id'=>'Selecione um corretor');
-		foreach ($lms as $linha):
-			$corr[$linha->c_nome] = $linha->c_nome;
+	public function get_corretor1($idemp){
+		$this->db->select('*');
+		$this->db->from('tbempreendimento_has_tbcorretor');
+		$this->db->join('tbcorretor', 'tbcorretor.id = tbcorretor_id');
+		$this->db->where('tbempreendimento_id', $idemp);
+		$this->db->where('tbcorretor.c_ativo', 1);
+		$query = $this->db->get()->result();
+		$corr1 = array(''=>'Selecione um corretor');
+		foreach ($query as $linha):
+			$corr1[$linha->id] = $linha->c_nome;
 		endforeach;
-		return $corr;
+		return $corr1;
 	}
 	
-	public function getLote($quadra=NULL, $lote=NULL, $emp){
-		return $this->db->query('SELECT * FROM `tbquadralote` WHERE `tbempreendimento_id`='.$emp.' AND `quadra` LIKE "'.$quadra.'" AND lote = '.$lote.' AND `tbsituacaolote_id`=3');
+	public function getCorretor2($idemp=NULL, $idcorr1=NULL){
+		if(!is_null($idcorr1))
+			$this->db->where(array('tbempreendimento_has_tbcorretor.tbempreendimento_id' => $idemp, 'tbcorretor.id !='=>$idcorr1));
+		
+		return $this->db->select('*')
+						->from('tbempreendimento_has_tbcorretor')
+						->join('tbcorretor', 'tbcorretor.id = tbcorretor_id')
+						->get()->result();
 	}
+
+	public function getQuadra($idemp){
+		$this->db->where('tbempreendimento_id', $idemp);
+		$this->db->group_by('quadra');
+		$query = $this->db->get('tbquadralote')->result();
+		$qd = array(''=>'Qds');
+		foreach ($query as $quadra):
+			$qd[$quadra->quadra] = $quadra->quadra;
+		endforeach;
+		return $qd;
+	}
+	
+	public function getLote($idemp=NULL, $idqd=NULL){
+		if(!is_null($idqd))
+			$this->db->where('tbempreendimento_id', $idemp);
+			$this->db->where('quadra', $idqd);
+			$this->db->where('tbsituacaolote_id', 3);
+		
+		return $this->db->select('*')
+						->from('tbquadralote')
+						->get()->result();
+	}
+	
+	public function getqdlt($quadra, $lote){
+		$this->db->where('quadra', $quadra);
+		$this->db->where('lote', $lote);
+		$query = $this->db->get('tbquadralote')->row();
+		$mqd = $query->mquadrado;
+		$vll = $query->mquadrado*$query->vlmquadrado;
+		return $mqd;
+	}
+	
 	
 	
 	

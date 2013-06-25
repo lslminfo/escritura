@@ -154,18 +154,7 @@ class Escrituras_controle extends CI_Controller {
 	public function cadastrar(){
 		esta_logado();
 		
-		
-		function getCidades($id){
-			$cidades = $this->geral_m->getCidades($id);
-			
-			if(empty($cidades))
-				return '{ "nome:" "Nenhuma cidade encontrada" }';
-			
-			echo json_encode($cidades);
-			return;
-		}
-		
-		set_tema('footerinc', load_js(array('jquery')), FALSE);
+		set_tema('footerinc', load_js(array('escritura')), FALSE);
 		set_tema('tituloaba', 'Cadastra RE', FALSE);
 		set_tema('titulop', '<h3 class="text-center">RESUMO DE ESCRITURAS</h3>');
 		set_tema('subtitulo', '<h4 class="subheader text-center">'.$this->session->userdata('razao').'</h4>');
@@ -174,6 +163,33 @@ class Escrituras_controle extends CI_Controller {
 		load_template(); //$this->load->view('inicio_view', get_tema());
 	}
 
+//######################## FUNÇÕES AUXILIARES DO ESCRITURA.JS
+	function getCorretor2($idcorr1){
+		
+		$corretor2 = $this->geral_m->getCorretor2($this->session->userdata('id_emp'), $idcorr1);
+		if(empty($corretor2)):
+			return '{"nome": "Nenhum corretor encontrado"}';
+		endif;
+		
+		$arr_corretor2 = array();
+		foreach ($corretor2 as $linha):
+			$arr_corretor2[]='{"id":'.$linha->id.',"nome":"'.$linha->c_nome.'"}';
+		endforeach;
+		
+		echo '['.implode(",", $arr_corretor2).']';
+		
+		return;
+		
+	}
+
+	function getLote($idqd){
+		$lote = $this->geral_m->getLote($this->session->userdata('id_emp'), $idqd);
+		if(empty($lote)):
+			return '{"lote": "Nenhum lote encontrado"}';
+		endif;
+		echo json_encode($lote);
+		return;
+	}
 
 
 	
