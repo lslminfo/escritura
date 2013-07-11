@@ -165,31 +165,47 @@ class Escrituras_controle extends CI_Controller {
 
 //######################## FUNÇÕES AUXILIARES DO ESCRITURA.JS
 	function getCorretor2($idcorr1){
-		
 		$corretor2 = $this->geral_m->getCorretor2($this->session->userdata('id_emp'), $idcorr1);
+
 		if(empty($corretor2)):
 			return '{"nome": "Nenhum corretor encontrado"}';
 		endif;
-		
 		$arr_corretor2 = array();
 		foreach ($corretor2 as $linha):
 			$arr_corretor2[]='{"id":'.$linha->id.',"nome":"'.$linha->c_nome.'"}';
 		endforeach;
-		
 		echo '['.implode(",", $arr_corretor2).']';
-		
 		return;
-		
 	}
 
 	function getLote($idqd){
-		$lote = $this->geral_m->getLote($this->session->userdata('id_emp'), $idqd);
-		if(empty($lote)):
+		$qd = $this->geral_m->getLote($this->session->userdata('id_emp'), $idqd);
+		if(empty($qd)):
 			return '{"lote": "Nenhum lote encontrado"}';
 		endif;
-		echo json_encode($lote);
+		echo json_encode($qd);
 		return;
 	}
+	
+	function getqdlt($idlt){
+		$qdlt = $this->geral_m->getqdlt($this->session->userdata('quadra'), $idlt);
+		if(empty($qdlt)):
+			return FALSE;
+		endif;
+		echo json_encode($qdlt);
+		return;
+	}
+
+	function getregimes($id){
+		$regimes = $this->geral_m->get_regimes($id);
+		$arr_regimes = array();
+		foreach ($regimes as $linhas):
+			$arr_regimes[]='{"id":'.$linhas->id.',"regime":"'.$linhas->regime.'"}';
+		endforeach;
+		echo '['.implode(",", $arr_regimes).']';
+		return;
+	}
+
 
 
 	

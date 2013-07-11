@@ -19,8 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Banco de Dados: `_star`
 --
-CREATE DATABASE `_star` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `_star`;
+/*CREATE DATABASE `_star` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;*/
+USE `starimob_star`;
 
 -- --------------------------------------------------------
 
@@ -5754,6 +5754,54 @@ INSERT INTO `tbempreendimento_has_tbcorretor` (`tbempreendimento_id`, `tbcorreto
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `tbestadocivil`
+--
+
+CREATE TABLE IF NOT EXISTS `tbestadocivil` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `estadocivil` varchar(15) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+
+--
+-- Extraindo dados da tabela `tbestadocivil`
+--
+
+INSERT INTO `tbestadocivil` (`id`, `estadocivil`) VALUES
+(1, 'Casado(a)'),
+(3, 'Divorciado(a)'),
+(4, 'Separado(a)'),
+(5, 'Solteiro(a)'),
+(7, 'Viúvo(a)');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tbestadocivilregime`
+--
+
+CREATE TABLE IF NOT EXISTS `tbestadocivilregime` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `regime` varchar(30) NOT NULL,
+  `tbestadocivil_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`,`tbestadocivil_id`),
+  KEY `fk_tbestadocivilregime_tbestadocivil1_idx` (`tbestadocivil_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+
+--
+-- Extraindo dados da tabela `tbestadocivilregime`
+--
+
+INSERT INTO `tbestadocivilregime` (`id`, `regime`, `tbestadocivil_id`) VALUES
+(1, 'Comunhão parcial de bens', 1),
+(2, 'Comunhão universal de bens', 1),
+(3, 'Separação total de bens', 1),
+(6, 'Comunhão universal de bens', 1),
+(7, 'Separação total de bens', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `tbparceiro`
 --
 
@@ -6586,6 +6634,12 @@ ALTER TABLE `cidades`
 ALTER TABLE `tbempreendimento_has_tbcorretor`
   ADD CONSTRAINT `fk_tbempreendimento_has_tbcorretor_tbcorretor1` FOREIGN KEY (`tbcorretor_id`) REFERENCES `tbcorretor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_tbempreendimento_has_tbcorretor_tbempreendimento` FOREIGN KEY (`tbempreendimento_id`) REFERENCES `tbempreendimento` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Restrições para a tabela `tbestadocivilregime`
+--
+ALTER TABLE `tbestadocivilregime`
+  ADD CONSTRAINT `fk_tbestadocivilregime_tbestadocivil1` FOREIGN KEY (`tbestadocivil_id`) REFERENCES `tbestadocivil` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Restrições para a tabela `tbparceiro_has_tbempreendimento`

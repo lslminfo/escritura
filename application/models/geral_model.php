@@ -119,6 +119,7 @@ class Geral_model extends CI_Model {
 	}
 	
 	public function getLote($idemp=NULL, $idqd=NULL){
+		$this->session->set_userdata('quadra',$idqd);
 		if(!is_null($idqd))
 			$this->db->where('tbempreendimento_id', $idemp);
 			$this->db->where('quadra', $idqd);
@@ -133,12 +134,22 @@ class Geral_model extends CI_Model {
 		$this->db->where('quadra', $quadra);
 		$this->db->where('lote', $lote);
 		$query = $this->db->get('tbquadralote')->row();
-		$mqd = $query->mquadrado;
-		$vll = $query->mquadrado*$query->vlmquadrado;
-		return $mqd;
+		return $query;
 	}
 	
+	public function getcivil(){
+		$query = $this->db->get('tbestadocivil')->result();
+		$civil1 = array();
+		foreach ($query as $linha):
+			$civil1[$linha->id] = $linha->estadocivil;
+		endforeach;
+		return $civil1;
+	}
 	
+	public function get_regimes($idcivil){
+		$this->db->where('tbestadocivil_id', $idcivil);
+		return $this->db->get('tbestadocivilregime')->result();
+	}	
 	
 	
 }
